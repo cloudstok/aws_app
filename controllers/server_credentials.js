@@ -25,9 +25,7 @@ async function findAllCredentials(req, res) {
 
 async function insertServerCredentials(req, res) {
     try {
-        let {
-            server_name, ip_address, pem_file, username, password, notes
-        } = req.body;
+        let {server_name, ip_address, pem_file, username, password, notes } = req.body;
         password = await encrypt(password)
         await write.query(SQL_INSERT_SERVER, [server_name, ip_address, pem_file, username, password, notes]);
         return res.status(200).send({ status: true, message: "Server credentails inserted successfully" });

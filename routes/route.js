@@ -54,9 +54,9 @@ route.post('/delete/client/credentials/:client_id', DeleteClientCredentails);
 
 route.post('/add/clientAssign/credentials', insertClientAssignment);
 route.get('/get/clientAssign/credentials', findAllClientAssignment);
-route.get('/get/clientAssign/credentialbyid/:client_id',clientAssignFindById );
-route.post('/update/assignclientbyid/:client_id', updateClientAssignment);
-route.post('/delete/assignclient/credentials/:client_id', DeleteClientAssignment);
+route.get('/get/clientAssign/credentialbyid/:assignment_id',clientAssignFindById );
+route.post('/update/assignclientbyid/:assignment_id', updateClientAssignment);
+route.post('/delete/assignclient/credentials/:assignment_id', DeleteClientAssignment);
 
 
 

@@ -1,4 +1,5 @@
 const { write } = require("../conn");
+const { encrypt, decrypt } = require("../utilities/encryption-decryption");
 
 const SQL_CHECK_MISC_BY_ID = "select * from misc_credentials where misc_id = ? and is_deleted = 0  limit 1";
 const SQL_CHECK_MISC = "select * from misc_credentials where is_deleted = 0";
@@ -10,19 +11,22 @@ const SQL_DELETE_MISC = "update misc_credentials set is_deleted = 1 where misc_i
 
 async function findAllMiscCredentials(req, res) {
     try {
-        const [misc] = await write.query(SQL_CHECK_MISC);
+        let  [misc] = await write.query(SQL_CHECK_MISC);
+        for(let x of misc){
+           x.password = await decrypt(x.password)
+        }
         return res.status(200).send({ message: "Misc list", data: misc });
     }
     catch (err) {
+        console.log(err)
         return res.status(400).json({ status: false, message: "Something went wrong" })
     }
 }
 
 async function insertMiscCredentials(req, res) {
     try {
-        const {
-            service_name, alias, login_url, username, password, notes 
-        } = req.body;
+        let { service_name, alias, login_url, username, password, notes} = req.body;
+        password = await encrypt(password)
         await write.query(SQL_INSERT_MISC, [service_name, alias, login_url, username, password, notes ]);
         return res.status(200).send({ status: true, message: "Misc credentails inserted successfully" });
     }
@@ -34,8 +38,9 @@ async function insertMiscCredentials(req, res) {
 
 async function updateMiscCredentials(req, res) {
     try {
-        const { service_name, alias, login_url, username, password, notes } = req.body
+        let { service_name, alias, login_url, username, password, notes } = req.body
         let miscId = req.params.misc_id
+        password = await encrypt(password)
         await write.query(SQL_UPDATE_MISC, [service_name, alias, login_url, username, password, notes , miscId]);
         return res.status(200).send({ status: true, message: "Misc credentails updated successfully" });
 
@@ -49,7 +54,7 @@ async function updateMiscCredentials(req, res) {
 async function DeleteMiscCredentails(req, res) {
     try {
         await write.query(SQL_DELETE_MISC, [req.params.misc_id]);
-        return res.status(200).send({ status: true, message: "Misc deleted succesfully" });
+        return res.status(200).send({ status: true, message: "Misc deleted successfully" });
     }
     catch (err) {
         return res.status(400).json({ status: false, message: "Something went wrong" })
@@ -57,7 +62,8 @@ async function DeleteMiscCredentails(req, res) {
 }
 async function miscFindById(req, res) {
     try {
-        const [misc] = await write.query(SQL_CHECK_MISC_BY_ID, [req.params.misc_id]);
+        let [misc] = await write.query(SQL_CHECK_MISC_BY_ID, [req.params.misc_id]);
+        misc[0].password = await decrypt(misc[0].password)
         return res.status(200).send({ status: true, data: misc });
     }
     catch (err) {
