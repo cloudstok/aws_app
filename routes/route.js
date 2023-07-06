@@ -1,3 +1,4 @@
+const { insertClientAssignment, findAllClientAssignment, updateClientAssignment, DeleteClientAssignment, clientAssignFindById } = require('../controllers/client_assignment');
 const { insertClientCredentials, findAllClientCredentials, clientFindById, updateClientCredentials, DeleteClientCredentails } = require('../controllers/client_credentials');
 const { insertCloudCredentials, findAllCloudCredentials, cloudFindById, updateCloudCredentials, DeleteCloudCredentails } = require('../controllers/cloud_credentials');
 const { insertMiscCredentials, findAllMiscCredentials, miscFindById, updateMiscCredentials, DeleteMiscCredentails } = require('../controllers/misc_credentials');
@@ -48,6 +49,15 @@ route.get('/get/client/credentials', findAllClientCredentials);
 route.get('/get/client/credentialbyid/:client_id', clientFindById);
 route.post('/update/clientbyid/:client_id', updateClientCredentials);
 route.post('/delete/client/credentials/:client_id', DeleteClientCredentails);
+
+// CLient Assignment 
+
+route.post('/add/clientAssign/credentials', insertClientAssignment);
+route.get('/get/clientAssign/credentials', findAllClientAssignment);
+route.get('/get/clientAssign/credentialbyid/:client_id',clientAssignFindById );
+route.post('/update/assignclientbyid/:client_id', updateClientAssignment);
+route.post('/delete/assignclient/credentials/:client_id', DeleteClientAssignment);
+
 
 
 module.exports = route;
