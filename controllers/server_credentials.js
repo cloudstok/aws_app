@@ -46,6 +46,8 @@ async function updateServerCredentials(req, res) {
         let { server_name, ip_address, pem_file, username, password, notes } = req.body
         let serverID = req.params.server_id;
         password = await encrypt(password)
+        pem_file.value = await encrypt(pem_file.value)
+        pem_file = JSON.stringify(pem_file)
         await write.query(SQL_UPDATE_SERVER, [server_name, ip_address, pem_file, username, password, notes, serverID]);
         return res.status(200).send({ status: true, message: "Server credentails updated successfully" });
 
