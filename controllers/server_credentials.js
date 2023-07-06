@@ -14,6 +14,7 @@ async function findAllCredentials(req, res) {
         const [server] = await write.query(SQL_CHECK_SERVER);
         for(let x of server){
             x.password = await decrypt(x.password)
+            x.pem_file.value = await decrypt(x.pem_file.value)
         }
         return res.status(200).send({ message: "User list", data: server });
     }
@@ -28,6 +29,8 @@ async function insertServerCredentials(req, res) {
         let {
             server_name, ip_address, pem_file, username, password, notes
         } = req.body;
+        pem_file.value = await encrypt(pem_file.value)
+        pem_file = JSON.stringify(pem_file)
         password = await encrypt(password)
         await write.query(SQL_INSERT_SERVER, [server_name, ip_address, pem_file, username, password, notes]);
         return res.status(200).send({ status: true, message: "Server credentails inserted successfully" });
@@ -65,6 +68,7 @@ async function serverFindById(req, res) {
     try {
         const [server] = await write.query(SQL_CHECK_SERVER_BY_ID, [req.params.server_id]);
         server[0].password = await decrypt(server[0].password)
+        server[0].pem_file.value = await decrypt(server[0].pem_file.value)
         return res.status(200).send({ status: true, data: server });
     }
     catch (err) {
