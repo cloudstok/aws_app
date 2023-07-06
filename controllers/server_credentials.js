@@ -1,4 +1,5 @@
 const { write } = require("../conn");
+const { encrypt, decrypt } = require("../utilities/encryption-decryption");
 
 const SQL_CHECK_SERVER_BY_ID = "select * from server_credentials where server_id = ? and is_deleted = 0  limit 1";
 const SQL_CHECK_SERVER = "select * from server_credentials where is_deleted = 0";
@@ -11,18 +12,23 @@ const SQL_DELETE_SERVER = "update server_credentials set is_deleted = 1 where se
 async function findAllCredentials(req, res) {
     try {
         const [server] = await write.query(SQL_CHECK_SERVER);
+        for(let x of server){
+            x.password = await decrypt(x.password)
+        }
         return res.status(200).send({ message: "User list", data: server });
     }
     catch (err) {
+        console.log(err)
         return res.status(400).json({ status: false, message: "Something went wrong" })
     }
 }
 
 async function insertServerCredentials(req, res) {
     try {
-        const {
+        let {
             server_name, ip_address, pem_file, username, password, notes
         } = req.body;
+        password = await encrypt(password)
         await write.query(SQL_INSERT_SERVER, [server_name, ip_address, pem_file, username, password, notes]);
         return res.status(200).send({ status: true, message: "Server credentails inserted successfully" });
     }
@@ -34,8 +40,9 @@ async function insertServerCredentials(req, res) {
 
 async function updateServerCredentials(req, res) {
     try {
-        const { server_name, ip_address, pem_file, username, password, notes } = req.body
-        let serverID = req.params.server_id
+        let { server_name, ip_address, pem_file, username, password, notes } = req.body
+        let serverID = req.params.server_id;
+        password = await encrypt(password)
         await write.query(SQL_UPDATE_SERVER, [server_name, ip_address, pem_file, username, password, notes, serverID]);
         return res.status(200).send({ status: true, message: "Server credentails updated successfully" });
 
@@ -57,6 +64,7 @@ async function DeleteServerCredentails(req, res) {
 async function serverFindById(req, res) {
     try {
         const [server] = await write.query(SQL_CHECK_SERVER_BY_ID, [req.params.server_id]);
+        server[0].password = await decrypt(server[0].password)
         return res.status(200).send({ status: true, data: server });
     }
     catch (err) {

@@ -1,6 +1,7 @@
 const { write } = require("../conn");
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const { encrypt, decrypt } = require("../utilities/encryption-decryption");
 
  const SQL_CHECK_USER_BY_ID = "select * from profile where id = ? and is_deleted = 0  limit 1";
  const SQL_CHECK_USER = "select * from profile where user_id = ?  and is_deleted = 0 limit 1";
