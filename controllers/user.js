@@ -3,10 +3,10 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { encrypt, decrypt } = require("../utilities/encryption-decryption");
 
- const SQL_CHECK_USER_BY_ID = "select * from profile where id = ? and is_deleted = 0  limit 1";
+ const SQL_CHECK_USER_BY_ID = "select * from profile where id = ? and is_deleted = 0 limit 1";
  const SQL_CHECK_USER = "select * from profile where user_id = ?  and is_deleted = 0 limit 1";
  const SQL_INSERT_USER = "insert into profile(user_id, password,name) values (?,?,?)";
- const SQL_ALL_USER = "select * from profile where is_deleted = 0";
+ const SQL_ALL_USER = "select * from profile where  is_deleted = 0"  ;
  const SQL_UPDATE_USER = "update profile set name= ? where id = ? limit 1 ";
  const SQL_DELETE_USER = "update profile set is_deleted = 1 where id = ? limit 1 ";
 
@@ -61,7 +61,7 @@ async function updateUser(req, res){
 try{
     const {name} = req.body
     const [user] = await write.query(SQL_UPDATE_USER, [name,req.params.id]);
-    return res.status(200).send({ status: true, message: "User Update succesfully"});
+    return res.status(200).send({ status: true, message: "User Update successfully"});
 }
 catch(err){
     console.log(err)
@@ -71,7 +71,7 @@ catch(err){
 async function DeleteUser(req, res){
 try{
     const [user] = await write.query(SQL_DELETE_USER, [req.params.id]);
-    return res.status(200).send({ status: true, message: "User deleted succesfully"});
+    return res.status(200).send({ status: true, message: "User deleted successfully"});
 }
 catch(err){
     return res.status(400).json({ status: false, message: "Something went wrong"})

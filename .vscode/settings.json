@@ -6,8 +6,10 @@
         "cloudbyid",
         "Credentails",
         "credentialbyid",
+        "findallclients",
         "getallusers",
         "getuserbyid",
+        "insertclient",
         "miscbyid",
         "serverbyid"
     ]

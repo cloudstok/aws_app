@@ -9,19 +9,6 @@ const SQL_DELETE_MISC = "update misc_credentials set is_deleted = 1 where misc_i
 
 
 
-async function findAllMiscCredentials(req, res) {
-    try {
-        let  [misc] = await write.query(SQL_CHECK_MISC);
-        for(let x of misc){
-           x.password = await decrypt(x.password)
-        }
-        return res.status(200).send({ message: "Misc list", data: misc });
-    }
-    catch (err) {
-        console.log(err)
-        return res.status(400).json({ status: false, message: "Something went wrong" })
-    }
-}
 
 async function insertMiscCredentials(req, res) {
     try {
@@ -51,20 +38,37 @@ async function updateMiscCredentials(req, res) {
     }
 }
 
-async function DeleteMiscCredentails(req, res) {
+async function findAllMiscCredentials(req, res) {
     try {
-        await write.query(SQL_DELETE_MISC, [req.params.misc_id]);
-        return res.status(200).send({ status: true, message: "Misc deleted successfully" });
+        let  [misc] = await write.query(SQL_CHECK_MISC);
+        for(let x of misc){
+           x.password = await decrypt(x.password)
+        }
+        return res.status(200).send({ message: "Misc list", data: misc });
     }
     catch (err) {
+        console.log(err)
         return res.status(400).json({ status: false, message: "Something went wrong" })
     }
 }
+
+
+
 async function miscFindById(req, res) {
     try {
         let [misc] = await write.query(SQL_CHECK_MISC_BY_ID, [req.params.misc_id]);
         misc[0].password = await decrypt(misc[0].password)
         return res.status(200).send({ status: true, data: misc });
+    }
+    catch (err) {
+        return res.status(400).json({ status: false, message: "Something went wrong" })
+    }
+}
+
+async function DeleteMiscCredentails(req, res) {
+    try {
+        await write.query(SQL_DELETE_MISC, [req.params.misc_id]);
+        return res.status(200).send({ status: true, message: "Misc deleted successfully" });
     }
     catch (err) {
         return res.status(400).json({ status: false, message: "Something went wrong" })
