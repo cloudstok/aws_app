@@ -1,4 +1,4 @@
-const { collapseTextChangeRangesAcrossMultipleVersions } = require("typescript");
+// const { collapseTextChangeRangesAcrossMultipleVersions } = require("typescript");
 const { write } = require("../conn");
 
 const SQL_CHECK_CLIENT_BY_ID = "select * from client where client_id = ? and is_deleted = 0 limit 1";
