@@ -1,12 +1,13 @@
 const { write } = require("../conn");
 const { encrypt, decrypt } = require("../utilities/encryption-decryption");
 
-const SQL_CHECK_SERVER_BY_ID = "select * from server_credentials where server_id = ? and is_deleted = 0  limit 1";
+const SQL_CHECK_SERVER_BY_ID = "select * from server_credentials where cloud_credentials = ? and is_deleted = 0  limit 1";
 const SQL_CHECK_SERVER = "select * from server_credentials where is_deleted = 0";
 const SQL_INSERT_SERVER = "insert into server_credentials(server_name, ip_address, pem_file, username, password, notes,cloud_credentials) values (?,?,?,?,?,?,?)";
 const SQL_UPDATE_SERVER = "update server_credentials set server_name= ?, ip_address = ?, pem_file = ?, username = ?, password= ?, notes = ?  where server_id = ? limit 1 ";
 const SQL_DELETE_SERVER = "update server_credentials set is_deleted = 1 where server_id = ? limit 1 ";
 
+const SQL_CHECK_CLOUD = "select * from Cloud_credentials where is_deleted = 0";
 
 
 
@@ -61,10 +62,18 @@ async function findAllCredentials(req, res) {
 
 async function serverFindById(req, res) {
     try {
-        const [server] = await write.query(SQL_CHECK_SERVER_BY_ID, [req.params.server_id]);
-        server[0].password = await decrypt(server[0].password)
-        server[0].pem_file.value = await decrypt(server[0].pem_file.value)
-        return res.status(200).send({ status: true, data: server });
+         const [cloud] = await write.query(SQL_CHECK_CLOUD)
+         for(let x of cloud){
+             const [server] = await write.query(SQL_CHECK_SERVER_BY_ID, [x.acc_id]);
+             if(server.length > 0){
+             for(let y of server){
+                 y.password = await decrypt(y.password)
+                 y.pem_file.value = await decrypt(y.pem_file.value)
+             }
+                 x.serverCredentails = server
+             }
+         }
+        return res.status(200).send({ status: true, data: cloud });
     }
     catch (err) {
         console.log(err)

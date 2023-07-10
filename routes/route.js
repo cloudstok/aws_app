@@ -28,7 +28,7 @@ route.get('/findClientbyid/:client_id', findClientById);
 
 route.post('/add/server/credentials', insertServerCredentials);
 route.get('/get/server/credentials', findAllCredentials);
-route.get('/get/credentialbyid/:server_id', serverFindById);
+route.get('/get/server', serverFindById);
 route.post('/update/serverbyid/:server_id', updateServerCredentials);
 route.post('/delete/server/credentials/:server_id', DeleteServerCredentails);
 
