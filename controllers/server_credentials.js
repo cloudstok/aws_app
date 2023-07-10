@@ -1,15 +1,11 @@
 const { write } = require("../conn");
 const { encrypt, decrypt } = require("../utilities/encryption-decryption");
-
-const SQL_CHECK_SERVER_BY_ID = "select * from server_credentials where cloud_credentials = ? and is_deleted = 0  limit 1";
+const SQL_CHECK_SERVER_BY_ID = "select * from server_credentials where cloud_credentials = ? and is_deleted = 0 ";
 const SQL_CHECK_SERVER = "select * from server_credentials where is_deleted = 0";
 const SQL_INSERT_SERVER = "insert into server_credentials(server_name, ip_address, pem_file, username, password, notes,cloud_credentials) values (?,?,?,?,?,?,?)";
 const SQL_UPDATE_SERVER = "update server_credentials set server_name= ?, ip_address = ?, pem_file = ?, username = ?, password= ?, notes = ?  where server_id = ? limit 1 ";
 const SQL_DELETE_SERVER = "update server_credentials set is_deleted = 1 where server_id = ? limit 1 ";
-
 const SQL_CHECK_CLOUD = "select * from Cloud_credentials where is_deleted = 0";
-
-
 
 async function insertServerCredentials(req, res) {
     try {
