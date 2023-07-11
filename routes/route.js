@@ -1,10 +1,11 @@
 const { insertClientAssignment, findAllClientAssignment, updateClientAssignment, DeleteClientAssignment, clientAssignFindById } = require('../controllers/client_assignment');
-const { insertClient, findAllClients, findClientById } = require('../controllers/client_controller');
+const { insertClient, findAllClients, findClientById, myAllClient } = require('../controllers/client_controller');
 const { insertClientCredentials, findAllClientCredentials, clientFindById, updateClientCredentials, DeleteClientCredentails } = require('../controllers/client_credentials');
 const { insertCloudCredentials, findAllCloudCredentials, cloudFindById, updateCloudCredentials, DeleteCloudCredentails } = require('../controllers/cloud_credentials');
 const { insertMiscCredentials, findAllMiscCredentials, miscFindById, updateMiscCredentials, DeleteMiscCredentails } = require('../controllers/misc_credentials');
 const { insertServerCredentials, findAllCredentials, serverFindById, updateServerCredentials, DeleteServerCredentails } = require('../controllers/server_credentials');
 const { register, login, findAllUsers, findById, DeleteUser, updateUser } = require('../controllers/user');
+const verifyToken = require('../controllers/verify');
 
 const route = require('express').Router();
 
@@ -20,6 +21,7 @@ route.post('/updateuser/:id', updateUser);
 route.post('/insertclient', insertClient);
 route.get('/findallclients', findAllClients);
 route.get('/findClientbyid/:client_id', findClientById);
+route.get('/myClient', verifyToken, myAllClient);
 
 
 

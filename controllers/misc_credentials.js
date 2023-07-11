@@ -27,9 +27,9 @@ async function insertMiscCredentials(req, res) {
 async function updateMiscCredentials(req, res) {
     try {
         let { service_name, alias, login_url, username, password, notes } = req.body
-        let miscId = req.params.misc_id
+        let {misc_id} = req.params
         password = await encrypt(password)
-        await write.query(SQL_UPDATE_MISC, [service_name, alias, login_url, username, password, notes , miscId]);
+        await write.query(SQL_UPDATE_MISC, [service_name, alias, login_url, username, password, notes , misc_id]);
         return res.status(200).send({ status: true, message: "Misc credentails updated successfully" });
 
     }

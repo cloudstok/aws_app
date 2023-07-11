@@ -24,7 +24,7 @@ async function insertClientCredentials(req, res) {
 async function updateClientCredentials(req, res) {
     try {
         let {service_name, alias, login_url, username, password, notes} = req.body
-        let clientId = req.params.client_id
+        let {clientId} = req.params
         password = await encrypt(password)
         await write.query(SQL_UPDATE_CLIENT, [service_name, alias, login_url, username, password, notes , clientId]);
         return res.status(200).send({ status: true, message: "Client credentails updated successfully" });
