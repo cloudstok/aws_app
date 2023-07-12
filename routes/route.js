@@ -38,7 +38,7 @@ route.post('/delete/server/credentials/:server_id', DeleteServerCredentails);
 
 route.post('/add/misc/credentials', insertMiscCredentials);
 route.get('/get/misc/credentials', findAllMiscCredentials);
-route.get('/get/misc/credentialbyid/:misc_id', miscFindById);
+route.get('/get/server/misc', miscFindById);
 route.post('/update/miscbyid/:misc_id', updateMiscCredentials);
 route.post('/delete/misc/credentials/:misc_id', DeleteMiscCredentails);
 

@@ -6,7 +6,7 @@ const SQL_CHECK_MISC = "select * from misc_credentials where is_deleted = 0";
 const SQL_INSERT_MISC = "insert into misc_credentials(service_name, alias, login_url, username, password, notes  , server_credential) values (?,?,?,?,?,? ,?)";
 const SQL_UPDATE_MISC = "update misc_credentials set service_name= ?, alias = ?, login_url = ?, username = ?, password= ?, notes = ?  where misc_id = ? limit 1 ";
 const SQL_DELETE_MISC = "update misc_credentials set is_deleted = 1 where misc_id = ? limit 1 ";
-const SQL_CHECK_SERVER = "select * from server_credentials where is_deleted = 0";
+const SQL_CHECK_SERVER = "select * from server_credentials where is_deleted = 0 ";
 
 
 

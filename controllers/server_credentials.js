@@ -10,9 +10,9 @@ const SQL_CHECK_CLOUD = "select * from Cloud_credentials where is_deleted = 0";
 async function insertServerCredentials(req, res) {
     try {
         let { server_name, ip_address, pem_file, username, password, notes, cloud_credentials } = req.body;
-        // [pem_file.value, password] = await Promise.all([encrypt(pem_file.value), encrypt(password)])
-        // pem_file = JSON.stringify(pem_file)
-        // await write.query(SQL_INSERT_SERVER, [server_name, ip_address, pem_file, username, password, notes, cloud_credentials]);
+         [pem_file.value, password] = await Promise.all([encrypt(pem_file.value), encrypt(password)])
+         pem_file = JSON.stringify(pem_file)
+         await write.query(SQL_INSERT_SERVER, [server_name, ip_address, pem_file, username, password, notes, cloud_credentials]);
         return res.status(200).send({ status: true, message: "Server credentails inserted successfully" });
     }
     catch (err) {
